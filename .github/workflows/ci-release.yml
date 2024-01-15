@@ -49,7 +49,7 @@ jobs:
           filename=${apkLocation##*/}
           initialReleaseName=${filename%Release.apk*}
           echo "RELEASE_NAME=$(cut -d "_" -f1 <<< "$initialReleaseName")" >> $GITHUB_ENV
-          initialTagName=$(cut -d "v" -f2 <<< "$initialReleaseName")
+          initialTagName=$(cut -d "v" -f3 <<< "$initialReleaseName")
           echo "TAG_NAME=$(cut -d "_" -f1 <<< "$initialTagName")" >> $GITHUB_ENV
 
       - name: Create Release
@@ -60,3 +60,4 @@ jobs:
           artifacts: ${{ env.APK_LOCATION }}
           tag: ${{ env.TAG_NAME }}
           token: ${{ secrets.PAT }}
+          allowUpdates: true
