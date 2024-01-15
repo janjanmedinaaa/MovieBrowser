@@ -8,7 +8,7 @@
 - Dagger Hilt
 
 ## Architecture
-- MVVM Archicture
+- I used the MVVM Architecture make the project structure easier to navigate and more maintanable.
 
 ## UI Design
 - Inspiration from [Dribble](https://dribbble.com/shots/4276185-Movie-Application)
