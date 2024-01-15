@@ -9,11 +9,11 @@ class Favorite(
     name: String,
     _imageUrl: String,
     _price: Float?,
-    currency: String,
-    genre: String,
-    longDescription: String,
-    _timeMillis: Int,
-    _releaseDate: String
+    currency: String?,
+    genre: String?,
+    longDescription: String?,
+    _timeMillis: Int?,
+    _releaseDate: String?
 ) : Movie(
     favoriteId,
     name,

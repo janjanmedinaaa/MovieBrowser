@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import medina.juanantonio.moviebrowser.R
@@ -167,7 +168,8 @@ fun HomeScreenLayout(
                     }
                 ),
                 style = MaterialTheme.typography.body2,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                fontSize = 12.sp
             )
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.element_spacing)))
@@ -293,7 +295,7 @@ fun MovieItem(
                         modifier = Modifier.padding(bottom = 2.dp),
                         text = stringResource(
                             R.string.genre_minutes_label,
-                            movie.genre,
+                            movie.genre ?: "Unknown",
                             movie.minutes
                         ),
                         style = MaterialTheme.typography.body2,

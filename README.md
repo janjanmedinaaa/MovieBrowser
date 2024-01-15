@@ -8,7 +8,7 @@
 - Dagger Hilt
 
 ## Architecture
-- I used the MVVM Architecture make the project structure easier to navigate and more maintanable.
+- I used the MVVM Architecture to make the project structure easier to navigate and more maintanable. It aims to seperate the business logic and data from the user interface.
 
 ## UI Design
 - Inspiration from [Dribble](https://dribbble.com/shots/4276185-Movie-Application)
@@ -25,5 +25,5 @@ The Persistence functionality relies on the Android Room Library by caching the 
 2. **Details Screen**
     - The Details screen also listens for changes in the Favorites list, so that when the user adds/removes the movie in the Favorites, the UI will update accordingly.
     - The Details screen also retrieves its movie from the database, looking up the `currentlyDisplayed` item in the Cache Movies table.
-    - On Start, in case the Cache Movies list is not empty, and there is atleast one `currentlyDisplayed` row that is **true**, it should automatically restart from the Details Screen.
+    - On Start, in case the Cache Movies list is not empty, and there is atleast one `currentlyDisplayed` row that is **true**, it should automatically restart from the Details Screen. (Not implemented yet)
     - Updating the **Favorite** status of a movie item should also update in the Home Screen list.
