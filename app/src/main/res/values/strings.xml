@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Movie Browser</string>
+
+    <string name="itunes_api_base_url">https://itunes.apple.com/</string>
+
+    <!-- Server Error Message -->
+    <string name="no_internet_connection">Please check your internet connection and try again later.</string>
+    <string name="something_went_wrong">Something went wrong. Try again later.</string>
+
+    <!-- Home Screen -->
+    <string name="movies_title">Movies</string>
+    <string name="search_input_label">Search</string>
+    <string name="genre_minutes_label">%s - %s min</string>
+
+    <!-- Details Screen -->
+    <string name="add_to_favorites_label">Add to Favorites</string>
+    <string name="added_to_favorites_label">Added to Favorites</string>
+    <string name="release_date_label">Release Data %s</string>
+</resources>
