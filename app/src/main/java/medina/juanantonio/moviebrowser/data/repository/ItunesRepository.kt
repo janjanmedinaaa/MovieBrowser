@@ -1,8 +1,6 @@
 package medina.juanantonio.moviebrowser.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import medina.juanantonio.moviebrowser.data.models.CacheMovie
 import medina.juanantonio.moviebrowser.data.models.Favorite
 import medina.juanantonio.moviebrowser.data.models.Movie
@@ -18,6 +16,8 @@ class ItunesRepositoryImpl(
     private val favoritesLocalSource: FavoritesLocalSource,
     private val cacheMovieLocalSource: CacheMovieLocalSource
 ) : ItunesRepository {
+
+    private val manuallyUpdateFlow = MutableStateFlow(Unit)
 
     override suspend fun getSearchResults(
         query: String,
@@ -98,13 +98,20 @@ class ItunesRepositoryImpl(
     }
 
     override suspend fun clearCacheMovies() {
-        cacheMovieLocalSource.clearCacheMovies()
+        val cacheMovieList = cacheMovieLocalSource.getCacheMovies().firstOrNull()
+
+        if (cacheMovieList.isNullOrEmpty()) {
+            manuallyUpdateFlow.update { }
+        } else {
+            cacheMovieLocalSource.clearCacheMovies()
+        }
     }
 
     override fun getHomeScreenFeed(
         transform: (List<Favorite>, List<CacheMovie>) -> Unit
     ): Flow<Unit> {
         return getFavorites()
+            .combine(manuallyUpdateFlow) { favorites, _ -> favorites }
             .combine(cacheMovieLocalSource.getCacheMovies(), transform)
     }
 }

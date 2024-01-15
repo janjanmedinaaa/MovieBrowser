@@ -64,6 +64,7 @@ fun HomeScreen(
     val uiState by homeViewModel.uiState.collectAsState()
     var searchText by rememberSaveable { homeViewModel.searchText }
     val isLoading by rememberSaveable { homeViewModel.isLoading }
+    val lastTimeUpdated by rememberSaveable { homeViewModel.lastTimeUpdated }
 
     LaunchedEffect(Unit) {
         homeViewModel.listenToHomeScreenFeed()
@@ -73,6 +74,7 @@ fun HomeScreen(
         searchText = searchText,
         uiState = uiState,
         isLoading = isLoading,
+        lastTimeUpdated = lastTimeUpdated,
         onSearchChanged = {
             searchText = it
             homeViewModel.onSearchChanged(it)
@@ -97,6 +99,7 @@ fun HomeScreenLayout(
     searchText: String,
     uiState: HomeScreenUIState,
     isLoading: Boolean,
+    lastTimeUpdated: String,
     onSearchChanged: (String) -> Unit = {},
     onItemClicked: (Movie) -> Unit = {},
     onFavoriteClicked: (Movie) -> Unit = {}
@@ -127,8 +130,7 @@ fun HomeScreenLayout(
                     .fillMaxWidth()
                     .padding(
                         start = dimensionResource(R.dimen.element_spacing),
-                        end = dimensionResource(R.dimen.element_spacing),
-                        bottom = dimensionResource(R.dimen.element_spacing)
+                        end = dimensionResource(R.dimen.element_spacing)
                     ),
                 value = searchText,
                 label = { Text(text = stringResource(R.string.search_input_label)) },
@@ -143,6 +145,22 @@ fun HomeScreenLayout(
                     }
                 }
             )
+
+            if (lastTimeUpdated.isNotBlank()) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 4.dp,
+                            end = dimensionResource(R.dimen.element_spacing)
+                        ),
+                    text = stringResource(R.string.last_updated_label, lastTimeUpdated),
+                    style = MaterialTheme.typography.body2,
+                    textAlign = TextAlign.End
+                )
+            }
+
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.element_spacing)))
 
             when (uiState) {
                 is HomeScreenUIState.Success -> {
@@ -314,7 +332,8 @@ fun HomeScreenSuccessPreview() {
                     )
                 )
             ),
-            isLoading = false
+            isLoading = false,
+            lastTimeUpdated = "2023-01-12 10:10:10"
         )
     }
 }
@@ -326,7 +345,8 @@ fun HomeScreenErrorPreview() {
         HomeScreenLayout(
             searchText = "Superman",
             uiState = HomeScreenUIState.Error(message = "No Results Found"),
-            isLoading = true
+            isLoading = true,
+            lastTimeUpdated = "2023-01-12 10:10:10"
         )
     }
 }
