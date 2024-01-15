@@ -12,21 +12,21 @@ open class Movie(
     val name: String,
     val _imageUrl: String,
     val _price: Float?,
-    val currency: String,
-    val genre: String,
-    val longDescription: String,
-    val _timeMillis: Int,
-    val _releaseDate: String
+    val currency: String?,
+    val genre: String?,
+    val longDescription: String?,
+    val _timeMillis: Int?,
+    val _releaseDate: String?
 ) {
 
     @get:Ignore
     val displayPrice: String
-        get() = if (_price == null) "FREE" else "${currency.uppercase()} $_price"
+        get() = if (_price == null) "FREE" else "${currency?.uppercase()} $_price"
 
 
     @get:Ignore
     val minutes: Int
-        get() = _timeMillis / 60000
+        get() = (_timeMillis ?: 60000) / 60000
 
     @get:Ignore
     val releaseDate: String

@@ -29,17 +29,17 @@ class SearchResult(
     val price: Float?,
 
     @Json(name = "currency")
-    val currency: String,
+    val currency: String?,
 
     @Json(name = "primaryGenreName")
-    val genre: String,
+    val genre: String?,
 
     @Json(name = "longDescription")
-    val longDescription: String,
+    val longDescription: String?,
 
     @Json(name = "trackTimeMillis")
-    val trackTimeMillis: Int,
+    val trackTimeMillis: Int?,
 
     @Json(name = "releaseDate")
-    val releaseDate: String
+    val releaseDate: String?
 )
