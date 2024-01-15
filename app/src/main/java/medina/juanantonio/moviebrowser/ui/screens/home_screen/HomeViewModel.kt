@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
 
     private var searchJob: Job? = null
     val searchText = mutableStateOf("")
+    val lastTimeUpdated = mutableStateOf("")
     val isLoading = mutableStateOf(true)
 
     val uiState = MutableStateFlow<HomeScreenUIState>(
@@ -78,6 +79,7 @@ class HomeViewModel @Inject constructor(
         }
 
         uiState.update { newUIState }
+        lastTimeUpdated.value = cacheMovies.firstOrNull()?.timeSaved ?: ""
         isLoading.value = false
     }
 
@@ -111,9 +113,8 @@ class HomeViewModel @Inject constructor(
 
             if (results is Result.Error) {
                 withContext(dispatchers.main) {
-                    results.message?.let {
-                        uiState.value = HomeScreenUIState.Error(message = it)
-                    }
+                    uiState.value =
+                        HomeScreenUIState.Error(message = results.message ?: "Something went wrong")
                 }
             }
 

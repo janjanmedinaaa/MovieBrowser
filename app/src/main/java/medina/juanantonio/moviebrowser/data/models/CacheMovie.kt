@@ -1,7 +1,9 @@
 package medina.juanantonio.moviebrowser.data.models
 
+import android.icu.text.SimpleDateFormat
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity
 class CacheMovie(
@@ -28,4 +30,7 @@ class CacheMovie(
 
     var currentlyDisplayed: Boolean = false
     var keyword: String = ""
+
+    var timeSaved: String =
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date())
 }
