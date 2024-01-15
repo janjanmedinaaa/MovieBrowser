@@ -3,6 +3,14 @@
 
     <dimen name="element_spacing">16dp</dimen>
 
+    <!-- Home Screen -->
     <dimen name="image_corner_radius">2dp</dimen>
-    <dimen name="card_elevation">16dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="movie_item_poster_width">112dp</dimen>
+
+    <!-- Details Screen -->
+    <dimen name="banner_height">180dp</dimen>
+    <dimen name="banner_bottom_spacing">124dp</dimen>
+    <dimen name="display_movie_poster_height">140dp</dimen>
 </resources>

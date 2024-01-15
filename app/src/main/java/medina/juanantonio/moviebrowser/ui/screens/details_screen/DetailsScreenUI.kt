@@ -1,7 +1,9 @@
 package medina.juanantonio.moviebrowser.ui.screens.details_screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -64,167 +66,191 @@ fun DetailsScreenLayout(
 ) {
     val navigationPaddingValues = WindowInsets.navigationBars.asPaddingValues()
 
-    Box(modifier = Modifier.padding(navigationPaddingValues)) {
-        Column(modifier = Modifier.fillMaxHeight()) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(navigationPaddingValues)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1F)
+                .verticalScroll(rememberScrollState())
+        ) {
             Box {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(2F),
-                    contentScale = ContentScale.Crop,
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie?.getImageUrl(30))
-                        .crossfade(true)
-                        .build(),
-                    error = painterResource(R.drawable.ic_sad_face),
-                    contentDescription = movie?.name,
-                    placeholder = BrushPainter(
-                        Brush.linearGradient(
-                            listOf(
-                                Color(color = 0xFFFFFFFF),
-                                Color(color = 0xFFDDDDDD),
-                            )
+                DetailsScreenContent(movie)
+
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = movie?.name ?: "",
+                            textAlign = TextAlign.Center,
+                            color = Color.White
                         )
-                    )
-                )
-
-                Column {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(2.65F)
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxHeight(0.2F)
-                            .padding(end = dimensionResource(R.dimen.element_spacing)),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        PosterImage(
+                    },
+                    navigationIcon = {
+                        IconButton(
                             modifier = Modifier
-                                .fillMaxHeight()
-                                .aspectRatio(0.75F)
-                                .padding(
-                                    start = dimensionResource(R.dimen.element_spacing)
-                                )
-                                .clip(RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius))),
-                            imageUrl = movie?.getImageUrl(500) ?: "",
-                            contentDescription = movie?.name
-                        )
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = dimensionResource(R.dimen.element_spacing))
+                                .padding(start = 8.dp)
+                                .size(dimensionResource(R.dimen.icon_size)),
+                            onClick = onBackButtonClicked
                         ) {
-                            Text(
-                                modifier = Modifier.padding(bottom = 2.dp),
-                                style = MaterialTheme.typography.body1,
-                                text = movie?.name ?: "",
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-
-                            Text(
-                                modifier = Modifier.padding(bottom = 2.dp),
-                                text = movie?.genre ?: "",
-                                style = MaterialTheme.typography.body2,
-                                color = Color.Gray,
-                                fontSize = 12.sp
-                            )
-
-                            Text(
-                                text = "${movie?.minutes}min",
-                                color = Color.Gray,
-                                style = MaterialTheme.typography.body2,
-                                fontSize = 12.sp
-                            )
-
-                            Text(
-                                text = stringResource(
-                                    R.string.release_date_label,
-                                    movie?.releaseDate ?: ""
-                                ),
-                                color = Color.Gray,
-                                style = MaterialTheme.typography.body2,
-                                fontSize = 12.sp
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = Icons.Default.ArrowBack.name,
+                                tint = Color.White
                             )
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = MaterialTheme.colors.primary,
+                    ),
+                )
+            }
+        }
+
+        FilledTonalButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.element_spacing)),
+            onClick = {
+                onFavoriteButtonClicked(movie ?: return@FilledTonalButton)
+            },
+            shape = RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius))
+        ) {
+            Text(
+                text =
+                if (movie?.isFavorite == true) {
+                    stringResource(R.string.added_to_favorites_label)
+                } else {
+                    stringResource(R.string.add_to_favorites_label)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun BannerImage(imageUrl: String?, contentDescription: String?) {
+    AsyncImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(dimensionResource(R.dimen.banner_height)),
+        contentScale = ContentScale.Crop,
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .crossfade(true)
+            .build(),
+        error = painterResource(R.drawable.ic_sad_face),
+        contentDescription = contentDescription,
+        placeholder = BrushPainter(
+            Brush.linearGradient(
+                listOf(
+                    Color(color = 0xFFFFFFFF),
+                    Color(color = 0xFFDDDDDD),
+                )
+            )
+        )
+    )
+}
+
+@Composable
+fun DetailsScreenContent(movie: Movie?) {
+    Column {
+        Box {
+            BannerImage(
+                imageUrl = movie?.getImageUrl(30),
+                contentDescription = movie?.name
+            )
+
+            Column {
+                Spacer(
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.banner_bottom_spacing))
+                )
+
+                Row(
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.display_movie_poster_height))
+                        .padding(end = dimensionResource(R.dimen.element_spacing)),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    PosterImage(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(0.75F)
+                            .padding(
+                                start = dimensionResource(R.dimen.element_spacing)
+                            )
+                            .clip(RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius))),
+                        imageUrl = movie?.getImageUrl(500) ?: "",
+                        contentDescription = movie?.name
+                    )
 
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1F)
-                            .padding(dimensionResource(R.dimen.element_spacing))
+                            .padding(start = dimensionResource(R.dimen.element_spacing))
                     ) {
                         Text(
-                            modifier = Modifier.padding(bottom = 8.dp),
+                            modifier = Modifier.padding(bottom = 2.dp),
                             style = MaterialTheme.typography.body1,
-                            text = "Synopsis",
+                            text = movie?.name ?: "",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
 
                         Text(
                             modifier = Modifier.padding(bottom = 2.dp),
-                            text = movie?.longDescription ?: "",
+                            text = movie?.genre ?: "",
                             style = MaterialTheme.typography.body2,
-                            color = Color.Gray
+                            color = Color.Gray,
+                            fontSize = 12.sp
                         )
-                    }
 
-                    FilledTonalButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(dimensionResource(R.dimen.element_spacing)),
-                        onClick = {
-                            onFavoriteButtonClicked(movie ?: return@FilledTonalButton)
-                        },
-                        shape = RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius))
-                    ) {
                         Text(
-                            text =
-                            if (movie?.isFavorite == true) {
-                                stringResource(R.string.added_to_favorites_label)
-                            } else {
-                                stringResource(R.string.add_to_favorites_label)
-                            }
+                            text = "${movie?.minutes}min",
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 12.sp
+                        )
+
+                        Text(
+                            text = stringResource(
+                                R.string.release_date_label,
+                                movie?.releaseDate ?: ""
+                            ),
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.body2,
+                            fontSize = 12.sp
                         )
                     }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.element_spacing))
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        style = MaterialTheme.typography.body1,
+                        text = stringResource(R.string.synopsis_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(bottom = 2.dp),
+                        text = movie?.longDescription ?: "",
+                        style = MaterialTheme.typography.body2,
+                        color = Color.Gray,
+                        letterSpacing = 1.sp
+                    )
                 }
             }
         }
-
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = movie?.name ?: "",
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .size(24.dp),
-                    onClick = onBackButtonClicked
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = Icons.Default.ArrowBack.name,
-                        tint = Color.White
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                titleContentColor = MaterialTheme.colors.primary,
-            ),
-        )
     }
 }
 

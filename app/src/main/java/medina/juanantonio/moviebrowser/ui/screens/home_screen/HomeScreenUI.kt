@@ -6,6 +6,7 @@
 
 package medina.juanantonio.moviebrowser.ui.screens.home_screen
 
+import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +46,7 @@ import medina.juanantonio.moviebrowser.ui.composables.PosterImage
 import medina.juanantonio.moviebrowser.ui.navigation.Screen
 import medina.juanantonio.moviebrowser.ui.theme.MovieBrowserTheme
 import medina.juanantonio.moviebrowser.ui.theme.MovieCardShadowColor
+import java.util.*
 
 sealed class HomeScreenUIState {
     class Error(val message: String) : HomeScreenUIState()
@@ -139,26 +142,33 @@ fun HomeScreenLayout(
                 trailingIcon = {
                     if (isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier
+                                .size(dimensionResource(R.dimen.icon_size)),
                             color = MaterialTheme.colors.primary
                         )
                     }
                 }
             )
 
-            if (lastTimeUpdated.isNotBlank()) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp,
-                            end = dimensionResource(R.dimen.element_spacing)
-                        ),
-                    text = stringResource(R.string.last_updated_label, lastTimeUpdated),
-                    style = MaterialTheme.typography.body2,
-                    textAlign = TextAlign.End
-                )
-            }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp,
+                        end = dimensionResource(R.dimen.element_spacing)
+                    ),
+                text = stringResource(
+                    R.string.last_updated_label,
+                    lastTimeUpdated.ifBlank {
+                        SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss.SSS",
+                            Locale.getDefault()
+                        ).format(Date())
+                    }
+                ),
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.End
+            )
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.element_spacing)))
 
@@ -244,7 +254,10 @@ fun MovieItem(
             onClick = { onClick(movie) }
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Spacer(modifier = Modifier.fillMaxWidth(0.30F))
+                Spacer(
+                    modifier = Modifier
+                        .width(dimensionResource(R.dimen.movie_item_poster_width))
+                )
 
                 Column(
                     modifier = Modifier
@@ -255,7 +268,7 @@ fun MovieItem(
                         horizontalAlignment = Alignment.End
                     ) {
                         IconButton(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier.size(dimensionResource(R.dimen.icon_size)),
                             onClick = { onFavoriteClicked(movie) }
                         ) {
                             Icon(
@@ -298,19 +311,22 @@ fun MovieItem(
 
         PosterImage(
             modifier = Modifier
-                .fillMaxWidth(0.3F)
+                .width(dimensionResource(R.dimen.movie_item_poster_width))
                 .aspectRatio(0.75F)
                 .padding(
                     start = dimensionResource(R.dimen.element_spacing),
-                    bottom = 8.dp
+                    bottom = dimensionResource(R.dimen.element_spacing)
                 )
-                .clip(RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius))),
+                .clip(RoundedCornerShape(dimensionResource(R.dimen.image_corner_radius)))
+                .align(Alignment.BottomStart),
             imageUrl = movie.getImageUrl(750),
             contentDescription = movie.name
         )
     }
 }
 
+@Preview(device = Devices.PIXEL)
+@Preview(device = Devices.PIXEL_XL)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenSuccessPreview() {
