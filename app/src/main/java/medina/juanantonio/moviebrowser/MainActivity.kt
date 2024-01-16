@@ -8,8 +8,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import medina.juanantonio.moviebrowser.ui.navigation.Navigation
-import medina.juanantonio.moviebrowser.ui.theme.MovieBrowserTheme
+import medina.juanantonio.moviebrowser.presentation.navigation.Navigation
+import medina.juanantonio.moviebrowser.presentation.ui.theme.MovieBrowserTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

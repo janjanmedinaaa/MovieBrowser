@@ -1,15 +1,15 @@
 package medina.juanantonio.moviebrowser.data.repository
 
 import kotlinx.coroutines.flow.*
-import medina.juanantonio.moviebrowser.data.models.CacheMovie
-import medina.juanantonio.moviebrowser.data.models.Favorite
-import medina.juanantonio.moviebrowser.data.models.Movie
-import medina.juanantonio.moviebrowser.data.models.toMovie
-import medina.juanantonio.moviebrowser.database.sources.CacheMovieLocalSource
-import medina.juanantonio.moviebrowser.database.sources.FavoritesLocalSource
-import medina.juanantonio.moviebrowser.network.Result
-import medina.juanantonio.moviebrowser.network.models.search.SearchResultsResponse
-import medina.juanantonio.moviebrowser.network.sources.ItunesRemoteSource
+import medina.juanantonio.moviebrowser.data.database.models.CacheMovie
+import medina.juanantonio.moviebrowser.data.database.models.Favorite
+import medina.juanantonio.moviebrowser.data.database.models.Movie
+import medina.juanantonio.moviebrowser.data.database.models.toMovie
+import medina.juanantonio.moviebrowser.data.database.sources.CacheMovieLocalSource
+import medina.juanantonio.moviebrowser.data.database.sources.FavoritesLocalSource
+import medina.juanantonio.moviebrowser.data.network.Result
+import medina.juanantonio.moviebrowser.data.network.models.search.SearchResultsResponse
+import medina.juanantonio.moviebrowser.data.network.sources.ItunesRemoteSource
 
 class ItunesRepositoryImpl(
     private val remoteSource: ItunesRemoteSource,
