@@ -3,7 +3,7 @@ name: Deploy to Github Release
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   buildAPK:
@@ -40,7 +40,7 @@ jobs:
       # To create the RELEASE_NAME, it splits the $initialReleaseName using the "_" delimeter
       # and gets the first item(-f1).
       # To create the $initialTagName, it splits the $initialReleaseName using the 'v' as delimeter
-      # and gets the second item(-f2).
+      # and gets the second item(-f3).
       # For the TAG_NAME and RELEASE_BODY, it splits the $initialTagName using the "_" delimeter
       # and uses the first and second item accordingly.
       - name: Store Tag Name
