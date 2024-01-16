@@ -27,3 +27,6 @@ The Persistence functionality relies on the Android Room Library by caching the 
     - The Details screen also retrieves its movie from the database, looking up the `currentlyDisplayed` item in the Cache Movies table.
     - On Start, in case the Cache Movies list is not empty, and there is atleast one `currentlyDisplayed` row that is **true**, it should automatically restart from the Details Screen. (Not implemented yet)
     - Updating the **Favorite** status of a movie item should also update in the Home Screen list.
+
+## Installation
+- You can download the latest APK from [Github](https://github.com/janjanmedinaaa/MovieBrowser/releases/latest). In case there are multiple APKs in a Release, you can download the highest version code.
